@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Users{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-light navbar-custom" style="background-color: #F8F9FA;">
+  <span class="navbar-brand mb-0 h1">Tasks Manager</span>
+  {% if current_user.role == 'admin' %}
+    <div style="position: absolute; right: 100px;">
+        <a href="{{ url_for('tasks.add_task') }}" class="btn btn-primary">Tasks</a>
+    </div>
+  {% endif %}
+  <div style="position: absolute; right: 10px;">
+    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger">Logout</a>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block page_content %}
+  <div class="container">
+    <h2 class="text-center mb-4">Users</h2>
+    <div class="row justify-content-center">
+      {% for user in users %}
+      <div class="col-lg-8 mb-4 d-flex justify-content-center">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title text-center" style="font-weight: bold;">User: {{ user.username }}</h5>
+            <p class="card-text text-center">Role: {{ user.role }}</p>
+            <div class="text-center mb-3">
+              {% if user.username != 'admin' %}
+              <a href="{{ url_for('users.promote_user', id=user.id) }}" class="btn btn-success mr-2">Promote</a>
+              {% else %}
+              <a href="{{ url_for('users.demote_user', id=user.id) }}" class="btn btn-info mr-2">Demote</a>
+              {% endif %}
+              <a href="{{ url_for('users.delete_user', id=user.id) }}" class="btn btn-danger">Delete</a>
+            </div>
+            <div class="tasks mt-3">
+              {% if user.tasks %}
+              <h5 class="mb-3 text-center">Tasks:</h5>
+              <div class="row">
+                {% for task in user.tasks %}
+                <div class="col-md-6 mb-3">
+                  <div class="card h-100 task-custom">
+                    <div class="card-body">
+                      <h6 class="card-title">{{ task.title }}</h6>
+                      <p class="card-text">{{ task.description }}</p>
+                      <p class="card-text"><small class="text-muted">Deadline: {{ task.deadline }}</small></p>
+                      <div>
+                        <a href="{{ url_for('tasks.edit_task', id=task.id) }}" class="btn btn-primary btn-sm mr-2">Edit</a>
+                        <a href="{{ url_for('tasks.delete_task', id=task.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              {% else %}
+              <p class="text-center">No tasks found</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% if not users %}
+      <p class="text-center">No users</p>
+      {% endif %}
+    </div>
+  </div>
+  {% endblock %}
+</div>
+{% endblock %}

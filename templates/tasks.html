@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Tasks{% endblock %}
+{% block navbar %}
+<nav class="navbar navbar-light navbar-custom" style="background-color: #F8F9FA;">
+  <span class="navbar-brand mb-0 h1">Tasks Manager</span>
+  {% if current_user.role == 'admin' %}
+    <div style="position: absolute; right: 100px;">
+        <a href="{{ url_for('users.list_users') }}" class="btn btn-primary">Users</a>
+    </div>
+  {% endif %}
+  <div style="position: absolute; right: 10px;">
+    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger">Logout</a>
+  </div>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block page_content %}
+    <h2 class="text-center">{{ header_text }}</h2>
+    <form method="POST" action="">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+          {{ form.title.label }}
+          {{ form.title(class="form-control") }}
+      </div>
+      <div class="form-group">
+          {{ form.description.label }}
+          {{ form.description(class="form-control") }}
+      </div>
+      <div class="form-group">
+          {{ form.deadline.label }}
+          {{ form.deadline(class="form-control") }}
+      </div>
+      <div class="form-group text-center">
+          <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+      </div>
+    </form>
+    <div>
+      <div class="tasks mb-3 mx-auto">
+        <h2 class="text-center">Tasks</h2>
+        {% if tasks %}
+        <div class="row">
+          {% for task in tasks %}
+          <div class="col-md-6 mb-3">
+            <div class="card h-100 task-custom">
+              <div class="card-body">
+                <h5 class="card-title">{{ task.title }}</h5>
+                <p class="card-text">{{ task.description }}</p>
+                <p class="card-text"><small class="text-muted">{{ task.deadline }}</small></p>
+                <div class="text-right">
+                  <a href="{{ url_for('tasks.edit_task', id=task.id) }}" class="btn btn-primary">Edit</a>
+                  <a href="{{ url_for('tasks.delete_task', id=task.id) }}" class="btn btn-danger">Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+            <p>No tasks</p>
+        {% endif %}
+      </div>
+    </div>
+  {% endblock %}
+</div>
+{% endblock %}
+
+  

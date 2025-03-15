@@ -1,0 +1,46 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block styles %}
+  {{ super() }}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-bottom: 1rem; 
+    }
+    .container {
+      flex: 1;
+    }
+    .navbar-custom {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+ 
+    .task-custom {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    }
+    
+  </style>
+{% endblock %}
+{% block navbar %}
+  <nav class="navbar navbar-light" style="background-color: #F8F9FA;">
+    <span class="navbar-brand mb-0 h1">Tasks Manager</span>
+  </nav>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
