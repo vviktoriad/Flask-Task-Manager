@@ -19,7 +19,6 @@ app.register_blueprint(users)
 
 if __name__ == '__main__':
     with app.app_context():
-        #db.drop_all()
         db.create_all()
         admin_user = User.query.filter_by(username='admin').first()
         if not admin_user:
